@@ -19,6 +19,15 @@ public class PlayerMovement : MonoBehaviour {
         Vector3 target = currentPosition;
         target.y += speed;
 
+        if(Input.GetKey("left") || Input.GetKey("a"))
+        {
+            target.x -= speed;
+        }
+
+        if(Input.GetKey("right") || Input.GetKey("d"))
+        {
+            target.x += speed;
+        }
         transform.position = Vector3.Lerp(currentPosition, target, Time.deltaTime);
 	}
 
