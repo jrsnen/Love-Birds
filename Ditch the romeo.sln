@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{E57ADCAC-F32A-9F5B-C7FD-9CEF03A39EEC}") = "Ditch the romeo", "Assembly-CSharp.csproj", "{2EA77856-0686-2EDF-3DD7-38289305B199}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2EA77856-0686-2EDF-3DD7-38289305B199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EA77856-0686-2EDF-3DD7-38289305B199}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EA77856-0686-2EDF-3DD7-38289305B199}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EA77856-0686-2EDF-3DD7-38289305B199}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
