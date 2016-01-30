@@ -10,7 +10,7 @@ public class LevelController : MonoBehaviour
     public GameObject ghost;
 
     public uint pathLength = 100;
-    public float pathInterval = 0.1f;
+    public float pathInterval = 0.01f;
     public float levelLength = 200;
     public GameObject pathObject;
 
@@ -22,13 +22,12 @@ public class LevelController : MonoBehaviour
     {
         path = new float[pathLength];
         index = 0;
-        InvokeRepeating("ghostPath", 1, pathInterval);
+        InvokeRepeating("ghostPath", 0, pathInterval);
         romeosTurnNext = true;
         romeo.SetActive(false);
 
         juliaMove = julia.GetComponent<PlayerMovement>();
         romeoMove = romeo.GetComponent<PlayerMovement>();
-        ghostRun = false;
     }
 
     // Update is called once per frame
@@ -45,6 +44,7 @@ public class LevelController : MonoBehaviour
                 //julia.SetActive(false);
                 romeosTurnNext = false;
                 romeoMove.dead = false;
+                index = 0;
             }
         }
         else
@@ -56,6 +56,7 @@ public class LevelController : MonoBehaviour
                 //romeo.SetActive(false);
                 romeosTurnNext = true;
                 juliaMove.dead = false;
+                index = 0;
             }
         }
         
@@ -63,7 +64,7 @@ public class LevelController : MonoBehaviour
 
     void ghostPath()
     {
-
+        Debug.Log("something");
         if (maxindex <= index)
         {
             // record path
@@ -72,9 +73,12 @@ public class LevelController : MonoBehaviour
             path[index] = julia.transform.position.x;
             Debug.Log("Path x: " + path[index]);
             ++maxindex;
+            Vector3 v = new Vector3(path[index + 2], index * pathInterval, 0);
+            ghost.transform.position = v;
         }
-        else if (maxindex > index + 2)
+        else if (maxindex > index + 10 * pathInterval)
         {
+            Debug.Log("else");
             Vector3 v = new Vector3(path[index + 2], index*pathInterval, 0);
             ghost.transform.position = v;
             // 
@@ -95,8 +99,6 @@ public class LevelController : MonoBehaviour
     private uint index;
     private uint maxindex;
     private float[] path;
-
-    private bool ghostRun;
 
     private bool romeosTurnNext;
     private PlayerMovement romeoMove;
