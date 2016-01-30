@@ -14,7 +14,7 @@ public class LevelController : MonoBehaviour
     public float levelLength = 200;
     public GameObject pathObject;
 
-    private Vector3 startPosition = new Vector3(0, 0, 0);
+    public Vector3 startPosition = new Vector3(0, 0, 0);
 
 
     // Use this for initialization
@@ -71,14 +71,15 @@ public class LevelController : MonoBehaviour
 
             path[index] = julia.transform.position.x;
             Debug.Log("Path x: " + path[index]);
-            ++index;
             ++maxindex;
         }
-        else
+        else if (maxindex > index + 2)
         {
+            Vector3 v = new Vector3(path[index + 2], index*pathInterval, 0);
+            ghost.transform.position = v;
             // 
-
         }
+        ++index;
     }
 
     //void printPath()
