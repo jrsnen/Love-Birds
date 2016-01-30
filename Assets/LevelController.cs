@@ -11,7 +11,7 @@ public class LevelController : MonoBehaviour
 
     public uint pathLength = 100;
     public float pathInterval = 1;
-
+    public float levelLength = 2;
     public GameObject pathObject;
 
     // Use this for initialization
@@ -21,19 +21,42 @@ public class LevelController : MonoBehaviour
         index = 0;
         InvokeRepeating("recordPath", 0, pathInterval);
         startPosition = new Vector3(0, 0, 0);
+        romeosTurnNext = true;
+        romeo.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        Debug.Log("julia Y: " + julia.transform.position.y);
+        if (romeosTurnNext)
+        {
+            if (julia.transform.position.y >= levelLength)
+            {
+                romeo.SetActive(true);
+                romeo.transform.position = startPosition;
+                julia.SetActive(false);
+                romeosTurnNext = false;
+            }
+        }
+        else
+        {
+            if (romeo.transform.position.y >= levelLength)
+            {
+                julia.SetActive(true);
+                julia.transform.position = startPosition;
+                romeo.SetActive(false);
+                romeosTurnNext = true;
+            }
+        }
+        
     }
 
     void recordPath()
     {
         Debug.Log("Path length: " + index + "/" + pathLength);
 
-        path[index] = transform.position.x;
+        path[index] = julia.transform.position.x;
         Debug.Log("Path x: " + path[index]);
         ++index;
     }
@@ -50,7 +73,9 @@ public class LevelController : MonoBehaviour
 
     private uint index;
 
-    private GameObject active;
+    private bool romeosTurnNext;
+    private PlayerMovement romeoMove;
+    private PlayerMovement juliaMove;
 
     private float[] path;
     private Vector3 startPosition;
