@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\LevelScript.cs" />
      <Compile Include="Assets\PlayerMovement.cs" />
      <Compile Include="Assets\TrackPath.cs" />
  <Reference Include="UnityEngine.UI">
