@@ -14,13 +14,15 @@ public class LevelController : MonoBehaviour
     public float levelLength = 200;
     public GameObject pathObject;
 
+    private Vector3 startPosition = new Vector3(0, 0, 0);
+
+
     // Use this for initialization
     void Start()
     {
         path = new float[pathLength];
         index = 0;
-        InvokeRepeating("recordPath", 1, pathInterval);
-        startPosition = new Vector3(0, 0, 0);
+        InvokeRepeating("ghostPath", 1, pathInterval);
         romeosTurnNext = true;
         romeo.SetActive(false);
 
@@ -59,13 +61,24 @@ public class LevelController : MonoBehaviour
         
     }
 
-    void recordPath()
+    void ghostPath()
     {
-        Debug.Log("Path length: " + index + "/" + pathLength);
 
-        path[index] = julia.transform.position.x;
-        Debug.Log("Path x: " + path[index]);
-        ++index;
+        if (maxindex <= index)
+        {
+            // record path
+            Debug.Log("Path length: " + index + "/" + pathLength);
+
+            path[index] = julia.transform.position.x;
+            Debug.Log("Path x: " + path[index]);
+            ++index;
+            ++maxindex;
+        }
+        else
+        {
+            // 
+
+        }
     }
 
     //void printPath()
@@ -79,6 +92,7 @@ public class LevelController : MonoBehaviour
     //}
 
     private uint index;
+    private uint maxindex;
     private float[] path;
 
     private bool ghostRun;
@@ -87,5 +101,5 @@ public class LevelController : MonoBehaviour
     private PlayerMovement romeoMove;
     private PlayerMovement juliaMove;
 
-    private Vector3 startPosition;
+    
 }
