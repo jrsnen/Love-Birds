@@ -23,6 +23,10 @@ public class LevelController : MonoBehaviour
         startPosition = new Vector3(0, 0, 0);
         romeosTurnNext = true;
         romeo.SetActive(false);
+
+        juliaMove = julia.GetComponent<PlayerMovement>();
+        romeoMove = romeo.GetComponent<PlayerMovement>();
+
     }
 
     // Update is called once per frame
@@ -31,22 +35,24 @@ public class LevelController : MonoBehaviour
         Debug.Log("julia Y: " + julia.transform.position.y);
         if (romeosTurnNext)
         {
-            if (julia.transform.position.y >= levelLength)
+            if (julia.transform.position.y >= levelLength || juliaMove.dead)
             {
                 romeo.SetActive(true);
                 romeo.transform.position = startPosition;
-                julia.SetActive(false);
+                //julia.SetActive(false);
                 romeosTurnNext = false;
+                romeoMove.dead = false;
             }
         }
         else
         {
-            if (romeo.transform.position.y >= levelLength)
+            if (romeo.transform.position.y >= levelLength || romeoMove.dead)
             {
                 julia.SetActive(true);
                 julia.transform.position = startPosition;
-                romeo.SetActive(false);
+                //romeo.SetActive(false);
                 romeosTurnNext = true;
+                juliaMove.dead = false;
             }
         }
         
