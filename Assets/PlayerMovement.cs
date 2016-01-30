@@ -7,8 +7,6 @@ public class PlayerMovement : MonoBehaviour {
     public float speed;
 	// Use this for initialization
 	void Start () {
-        path = new float[20];
-
 	}
 	
 	// Update is called once per frame
@@ -30,6 +28,4 @@ public class PlayerMovement : MonoBehaviour {
         }
         transform.position = Vector3.Lerp(currentPosition, target, Time.deltaTime);
 	}
-
-    public float[] path;
 }
