@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour {
 	public bool facingRight = false;
 	public float speed;
     public bool dead = false;
+    public bool ready = true;
 
 
 	// Use this for initialization
@@ -15,7 +16,7 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (!dead)
+        if (!dead && ready)
         {
             Vector3 currentPosition = transform.position;
 
@@ -43,6 +44,7 @@ public class PlayerMovement : MonoBehaviour {
                 transform.localRotation = Quaternion.Euler(0, 0, 0);
             }
             transform.position = Vector3.Lerp(currentPosition, target, Time.deltaTime);
+         
         }
 	}
 

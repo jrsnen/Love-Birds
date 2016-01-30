@@ -9,10 +9,15 @@ public class LevelController : MonoBehaviour
     public GameObject julia;
     public GameObject ghost;
 
-    public uint pathLength = 100;
+    public CameraFollow cf;
+
+    public uint pathLength = 1000;
     public float pathInterval = 0.01f;
     public float levelLength = 200;
-    public GameObject pathObject;
+    private float speed = 3.0f;
+    private float ghostSpeed = 3.0f;
+
+
 
     public Vector3 startPosition = new Vector3(0, 0, 0);
 
@@ -20,67 +25,126 @@ public class LevelController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        path = new float[pathLength];
+        path = new Vector3[pathLength];
         index = 0;
-        InvokeRepeating("ghostPath", 0, pathInterval);
         romeosTurnNext = true;
         romeo.SetActive(false);
+        ghost.SetActive(false);
 
         juliaMove = julia.GetComponent<PlayerMovement>();
         romeoMove = romeo.GetComponent<PlayerMovement>();
+
+        juliaMove.ready = false;
+        romeoMove.ready = false;
+
+        paused = true;
     }
 
+    void pause()
+    {
+        paused = true;
+       // CancelInvoke();
+        if (romeosTurnNext)
+            romeoMove.ready = false;
+        else
+            juliaMove.ready = false;
+    }
+    void unpause()
+    {
+        paused = false;
+        InvokeRepeating("ghostPath", 0, pathInterval);
+       
+
+
+        startTime = Time.time;
+
+    }
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log("julia Y: " + julia.transform.position.y);
-        if (romeosTurnNext)
+        if (paused)
         {
-            if (julia.transform.position.y >= levelLength || juliaMove.dead)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                CancelInvoke();
-                romeo.SetActive(true);
-                romeo.transform.position = startPosition;
-                //julia.SetActive(false);
-                romeosTurnNext = false;
-                romeoMove.dead = false;
-                index = 0;
+                unpause();
             }
         }
         else
         {
-            if (romeo.transform.position.y >= levelLength || romeoMove.dead)
+            timer = Time.time - startTime;
+
+            if (timer > timeCap)
             {
-                julia.SetActive(true);
-                julia.transform.position = startPosition;
-                //romeo.SetActive(false);
-                romeosTurnNext = true;
-                juliaMove.dead = false;
-                index = 0;
+                if (!romeosTurnNext)
+                    romeoMove.ready = true;
+                else
+                    juliaMove.ready = true;
             }
-        }
+
+                //Debug.Log("julia Y: " + julia.transform.position.y);
+                if (romeosTurnNext)
+                {
+                    if (julia.transform.position.y >= levelLength || juliaMove.dead)
+                    {
+                        romeoMove.speed = speed;
+                        romeo.SetActive(true);
+                        romeo.transform.position = startPosition;
+                        //julia.SetActive(false);
+                        romeosTurnNext = false;
+                        romeoMove.dead = false;
+                        index = 0;
+                        ghost.SetActive(true);
+                        ghost.transform.position = path[ghostIndex];
+                        cf.target = romeo;
+                        pause();
+                    }
+                }
+                else
+                {
+                    if (romeo.transform.position.y >= levelLength || romeoMove.dead)
+                    {
+                        juliaMove.speed = speed;
+                        julia.SetActive(true);
+                        julia.transform.position = startPosition;
+                        //romeo.SetActive(false);
+                        romeosTurnNext = true;
+                        juliaMove.dead = false;
+                        ghost.SetActive(true);
+                        cf.target = julia;
+                        index = 0;
+                        ghost.transform.position = path[ghostIndex];
+                        pause();
+                    }
+                }
+                ghost.transform.position = Vector3.MoveTowards(ghost.transform.position, targetPosition, Time.deltaTime * ghostSpeed);
+            }
         
     }
 
     void ghostPath()
     {
-        Debug.Log("something");
+        Debug.Log("Index:" + index + "/" + maxindex);
         if (maxindex <= index)
         {
             // record path
             Debug.Log("Path length: " + index + "/" + pathLength);
+            if(romeosTurnNext)
+            {
+                path[index] = julia.transform.position;
+            }
+            else
+                path[index] = romeo.transform.position;
 
-            path[index] = julia.transform.position.x;
+            
+            //path[index] = julia.transform.position.x;
             Debug.Log("Path x: " + path[index]);
             ++maxindex;
-            Vector3 v = new Vector3(path[index + 2], index * pathInterval, 0);
-            ghost.transform.position = v;
         }
-        else if (maxindex > index + 10 * pathInterval)
+        else if (maxindex > index + ghostIndex )
         {
-            Debug.Log("else");
-            Vector3 v = new Vector3(path[index + 2], index*pathInterval, 0);
-            ghost.transform.position = v;
+            Debug.Log("Ghosting");
+            //ghost.transform.position = path[index];
+            targetPosition = path[index + ghostIndex];
             // 
         }
         ++index;
@@ -98,11 +162,21 @@ public class LevelController : MonoBehaviour
 
     private uint index;
     private uint maxindex;
-    private float[] path;
+    private Vector3[] path;
+
+    private Vector3 targetPosition;
+    private bool paused;
+
+
 
     private bool romeosTurnNext;
     private PlayerMovement romeoMove;
     private PlayerMovement juliaMove;
 
+    private float timer = 0f;
+    private float startTime = 0f;
+    private float timeCap = 0.2f;
+
+    private const uint ghostIndex = 0;
     
 }
