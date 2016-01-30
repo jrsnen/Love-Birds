@@ -177,6 +177,7 @@ MonoBehaviour:
   pathInterval: 1
   levelLength: 100
   pathObject: {fileID: 0}
+  startPosition: {x: 3.56, y: 0.84, z: 0}
 --- !u!4 &227526191
 Transform:
   m_ObjectHideFlags: 0
@@ -373,7 +374,8 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 11444680, guid: 56fe9d18706a0eb43bf8cc62c4fe3ed7, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 56fe9d18706a0eb43bf8cc62c4fe3ed7, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &905950609
@@ -385,7 +387,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 905950612}
   - 212: {fileID: 905950611}
-  - 114: {fileID: 905950610}
   m_Layer: 0
   m_Name: GhostJulia
   m_TagString: Untagged
@@ -393,17 +394,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &905950610
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 905950609}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c8d525d78690ad4a91a30d29448278e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &905950611
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -446,45 +436,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
---- !u!1 &1042176541
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1042176543}
-  - 114: {fileID: 1042176542}
-  m_Layer: 0
-  m_Name: RecorderJulia
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1042176542
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1042176541}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c8d525d78690ad4a91a30d29448278e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1042176543
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1042176541}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.10224204, y: 2.556823, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
 --- !u!1 &1051968645 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 139952, guid: f9eef309df21a0f47988a71a20ca4db0, type: 2}
