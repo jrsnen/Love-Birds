@@ -11,7 +11,7 @@ public class LevelController : MonoBehaviour
 
     public uint pathLength = 100;
     public float pathInterval = 1;
-    public float levelLength = 2;
+    public float levelLength = 200;
     public GameObject pathObject;
 
     // Use this for initialization
