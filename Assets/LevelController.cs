@@ -10,7 +10,7 @@ public class LevelController : MonoBehaviour
     public GameObject ghost;
 
     public uint pathLength = 100;
-    public float pathInterval = 1;
+    public float pathInterval = 0.1f;
     public float levelLength = 200;
     public GameObject pathObject;
 
@@ -19,24 +19,25 @@ public class LevelController : MonoBehaviour
     {
         path = new float[pathLength];
         index = 0;
-        InvokeRepeating("recordPath", 0, pathInterval);
+        InvokeRepeating("recordPath", 1, pathInterval);
         startPosition = new Vector3(0, 0, 0);
         romeosTurnNext = true;
         romeo.SetActive(false);
 
         juliaMove = julia.GetComponent<PlayerMovement>();
         romeoMove = romeo.GetComponent<PlayerMovement>();
-
+        ghostRun = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("julia Y: " + julia.transform.position.y);
+        //Debug.Log("julia Y: " + julia.transform.position.y);
         if (romeosTurnNext)
         {
             if (julia.transform.position.y >= levelLength || juliaMove.dead)
             {
+                CancelInvoke();
                 romeo.SetActive(true);
                 romeo.transform.position = startPosition;
                 //julia.SetActive(false);
@@ -78,11 +79,13 @@ public class LevelController : MonoBehaviour
     //}
 
     private uint index;
+    private float[] path;
+
+    private bool ghostRun;
 
     private bool romeosTurnNext;
     private PlayerMovement romeoMove;
     private PlayerMovement juliaMove;
 
-    private float[] path;
     private Vector3 startPosition;
 }
