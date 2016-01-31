@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour {
 
     AudioSource audioSource;
 
+    bool animationReady = true;
+
 
 	// Use this for initialization
 	void Start () {
@@ -60,8 +62,38 @@ public class PlayerMovement : MonoBehaviour {
         dead = true;
         leafParticles.Play();
         audioSource.Play();
+        
+        Vector3 start = this.transform.position;
+        Vector3 add = new Vector3( 0f, 0.3f, 0f );
+        if (animationReady)
+            Move(other.transform, add, add, 0.2f);
     }
 
+    private void Move(Transform target, Vector3 to, Vector3 back, float duration)
+    {
+       
+        animationReady = false;
 
+        Go.defaultEaseType = GoEaseType.Linear;
+        var moveUpConfig = new GoTweenConfig().position( to, true );
+        var moveBackConfig = new GoTweenConfig().position( -back, true );
+        moveBackConfig.onComplete(orginalTween => Done());
+
+        var tweenOne = new GoTween( target, duration, moveUpConfig);
+        var tweenTwo = new GoTween( target, duration, moveBackConfig);
+
+
+        var chain = new GoTweenChain();
+        chain.append(tweenOne).append(tweenTwo);
+
+        chain.play();
+
+    }
+
+    void Done()
+    {
+        //Done
+        animationReady = true;
+    }
     
 }
