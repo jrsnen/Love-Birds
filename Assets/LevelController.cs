@@ -194,9 +194,10 @@ public class LevelController : MonoBehaviour
                         romeosTurnNext = false;
                         romeoMove.dead = false;
                         index = 0;
-                        rghost.SetActive(true);
-                        jghost.SetActive(false);
+                        rghost.SetActive(false);
+                        jghost.SetActive(true);
                         rghost.transform.position = path[ghostIndex];
+                        jghost.transform.position = path[ghostIndex];
                         cf.target = romeo;
                         pause();
                         scoreIndex = 0;
@@ -243,6 +244,7 @@ public class LevelController : MonoBehaviour
                         cf.target = julia;
                         index = 0;
                         rghost.transform.position = path[ghostIndex];
+                        jghost.transform.position = path[ghostIndex];
                         pause();
                         maxindexNow = maxindex;
                         scoreIndex = 0;
@@ -261,8 +263,7 @@ public class LevelController : MonoBehaviour
         else
         {
             //Show the score Screen
-            if( endScreen.IsDone() == false )
-                endScreen.MoveWindow( 4  );
+            Application.LoadLevel( 2 );
         }
 
         playerOne.text = juliascore.ToString();
