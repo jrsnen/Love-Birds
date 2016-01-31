@@ -23,6 +23,8 @@ public class LevelController : MonoBehaviour
 
     public Text playerOne;
     public Text playerTwo;
+    public Text playerOnefinal;
+    public Text playerTwofinal;
     public AudioSource coinAudio;
     public uint pathLength = 1000;
 
@@ -264,10 +266,14 @@ public class LevelController : MonoBehaviour
         {
             //Show the score Screen
             Application.LoadLevel( 2 );
+            PlayerPrefs.SetInt("romeoScore", (int)romeoscore);
+            PlayerPrefs.SetInt("juliaScore", (int)juliascore);
         }
 
         playerOne.text = juliascore.ToString();
+        playerOnefinal.text = juliascore.ToString();
         playerTwo.text = romeoscore.ToString();
+        playerTwofinal.text = romeoscore.ToString();
         //scoreField.text = "Julia's Score: " + juliascore + " Romeo's score: " + romeoscore;
         
     }

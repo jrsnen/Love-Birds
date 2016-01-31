@@ -4459,6 +4459,18 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &207045988 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11450374, guid: 5f701169013719948a2d7eb5a1506490,
+    type: 2}
+  m_PrefabInternal: {fileID: 207045987}
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+--- !u!114 &207045989 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11431888, guid: 5f701169013719948a2d7eb5a1506490,
+    type: 2}
+  m_PrefabInternal: {fileID: 207045987}
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1 &208868605
 GameObject:
   m_ObjectHideFlags: 0
@@ -4808,6 +4820,8 @@ MonoBehaviour:
   cf: {fileID: 379368114}
   playerOne: {fileID: 2043002465}
   playerTwo: {fileID: 1715351656}
+  playerOnefinal: {fileID: 207045989}
+  playerTwofinal: {fileID: 207045988}
   coinAudio: {fileID: 205036352}
   pathLength: 10000
   juliaAnim: {fileID: 1051968650}
