@@ -4601,9 +4601,14 @@ MonoBehaviour:
   julia: {fileID: 1051968645}
   ghost: {fileID: 1795888598}
   cf: {fileID: 379368114}
+  playerOne: {fileID: 2043002465}
+  playerTwo: {fileID: 1715351656}
   pathLength: 10000
   pathInterval: 0.1
+  pathNodeDistance: 1
+  ghostDistance: 10
   levelLength: 100
+  pathObject: {fileID: 0}
   startGUI: {fileID: 208868609}
   endScreen: {fileID: 1474288522}
   roundCounterText: {fileID: 607997794}
@@ -6594,7 +6599,7 @@ MonoBehaviour:
   minDistance: 0
   followDistance: -10
   target: {fileID: 1051968645}
-  offset: {x: 0, y: 0.2, z: 0}
+  offset: {x: 3.56, y: 0.2, z: 0}
 --- !u!114 &379368115
 MonoBehaviour:
   m_ObjectHideFlags: 0
