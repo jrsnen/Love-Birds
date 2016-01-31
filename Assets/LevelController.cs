@@ -21,10 +21,11 @@ public class LevelController : MonoBehaviour
     
     public float pathInterval = 0.01f;
     public float pathNodeDistance = 1.0f;
+    public float ghostDistance = 10.0f;
 
     public float levelLength = 200;
     private float speed = 3.0f;
-    private float ghostSpeed = 3.0f;
+    private float ghostSpeed = 4.0f;
 
     public GameObject pathObject;
 
@@ -53,6 +54,8 @@ public class LevelController : MonoBehaviour
         romeoMove.ready = false;
 
         paused = true;
+
+        path[0] = startPosition;
 
         //SEt GUi
         startGUI.InitPosition();
@@ -113,11 +116,26 @@ public class LevelController : MonoBehaviour
                         juliaMove.ready = true;
                 }
 
+
+
+
                 //Debug.Log("julia Y: " + julia.transform.position.y);
                 if (romeosTurnNext)
                 {
-
-                    //if()
+                       if(!firstRound && index <= maxindex)
+                       {
+                           if (path[index].y < julia.transform.position.y + ghostDistance)
+                            {
+                                targetPosition = path[index];
+                                ++index;
+                            }
+                       }
+                    if(path[maxindex].y + pathNodeDistance < julia.transform.position.y)
+                    {
+                        // eka node asetetaan startissa
+                        ++maxindex;
+                        path[maxindex] = julia.transform.position;
+                    }
 
                     // died or finished
                     if (julia.transform.position.y >= levelLength || juliaMove.dead)
@@ -140,6 +158,22 @@ public class LevelController : MonoBehaviour
                 }
                 else
                 {
+                    if (path[maxindex].y + pathNodeDistance < romeo.transform.position.y)
+                    {
+                        // eka node asetetaan startissa
+                        ++maxindex;
+                        path[maxindex] = romeo.transform.position;
+                    }
+                    if (!firstRound && index <= maxindex)
+                    {
+                        if (path[index].y - ghostDistance < romeo.transform.position.y)
+                        {
+                            targetPosition = path[index];
+                            ++index;
+                        }
+                    }
+
+
                     if (romeo.transform.position.y >= levelLength || romeoMove.dead)
                     {
                         juliaMove.speed = speed;
@@ -200,31 +234,32 @@ public class LevelController : MonoBehaviour
 
     void ghostPath()
     {
-        Debug.Log("Index:" + index + "/" + maxindex);
-        if (maxindex <= index)
-        {
-            // record path
-            Debug.Log("Path length: " + index + "/" + pathLength);
-            if(romeosTurnNext)
-            {
-                path[index] = julia.transform.position;
-            }
-            else
-                path[index] = romeo.transform.position;
+        //Debug.Log("Index:" + index + "/" + maxindex);
+        ////if (maxindex <= index)
+        ////{
+        ////    // record path
+        ////    Debug.Log("Path length: " + index + "/" + pathLength);
+        ////    if(romeosTurnNext)
+        ////    {
+        ////        path[index] = julia.transform.position;
+        ////    }
+        ////    else
+        ////        path[index] = romeo.transform.position;
 
             
-            //path[index] = julia.transform.position.x;
-            Debug.Log("Path x: " + path[index]);
-            ++maxindex;
-        }
-        else if (maxindex > index + ghostIndex )
-        {
-            Debug.Log("Ghosting");
-            //ghost.transform.position = path[index];
-            targetPosition = path[index + ghostIndex];
-            // 
-        }
-        ++index;
+        ////    //path[index] = julia.transform.position.x;
+        ////    Debug.Log("Path x: " + path[index]);
+        ////    ++maxindex;
+        ////}
+        ////else
+        //if (maxindex > index + ghostIndex )
+        //{
+        //    Debug.Log("Ghosting");
+        //    //ghost.transform.position = path[index];
+        //    targetPosition = path[index + ghostIndex];
+        //    // 
+        //}
+        //++index;
     }
 
     void printPath()
