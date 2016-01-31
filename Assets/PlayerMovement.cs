@@ -10,10 +10,15 @@ public class PlayerMovement : MonoBehaviour {
 
     public ParticleSystem leafParticles;
 
+    AudioSource audioSource;
+
 
 	// Use this for initialization
 	void Start () {
-	}
+
+        audioSource = GetComponent<AudioSource>();
+
+    }
 
 	// Update is called once per frame
 	void Update () {
@@ -54,6 +59,7 @@ public class PlayerMovement : MonoBehaviour {
     {
         dead = true;
         leafParticles.Play();
+        audioSource.Play();
     }
 
 
