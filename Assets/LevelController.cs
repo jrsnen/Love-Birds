@@ -9,7 +9,8 @@ public class LevelController : MonoBehaviour
 
     public GameObject romeo;
     public GameObject julia;
-    public GameObject ghost;
+    public GameObject rghost;
+    public GameObject jghost;
 
     //public Animation juliaAnim;
     //public Animation romeoAnim;
@@ -24,8 +25,14 @@ public class LevelController : MonoBehaviour
     public Text playerTwo;
     public AudioSource coinAudio;
     public uint pathLength = 1000;
-    
-    
+
+    public Animator juliaAnim;
+    public Animator romeoAnim;
+
+    public Animator rghostAnim;
+    public Animator jghostAnim;
+
+
     public float pathInterval = 0.01f;
     public float pathNodeDistance = 1.0f;
     public float ghostDistance = 10.0f;
@@ -52,7 +59,8 @@ public class LevelController : MonoBehaviour
         index = 0;
         romeosTurnNext = true;
         romeo.SetActive(false);
-        ghost.SetActive(false);
+        rghost.SetActive(false);
+        jghost.SetActive(false);
 
         juliaMove = julia.GetComponent<PlayerMovement>();
         romeoMove = romeo.GetComponent<PlayerMovement>();
@@ -60,7 +68,9 @@ public class LevelController : MonoBehaviour
         juliaMove.speed = speed;
         juliaMove.ready = false;
         romeoMove.ready = false;
-
+        juliaAnim.SetBool("fleeing", true);
+        rghostAnim.SetBool("fleeing", true);
+        jghostAnim.SetBool("fleeing", true);
         paused = true;
 
         path[0] = startPosition;
@@ -184,8 +194,9 @@ public class LevelController : MonoBehaviour
                         romeosTurnNext = false;
                         romeoMove.dead = false;
                         index = 0;
-                        ghost.SetActive(true);
-                        ghost.transform.position = path[ghostIndex];
+                        rghost.SetActive(true);
+                        jghost.SetActive(false);
+                        rghost.transform.position = path[ghostIndex];
                         cf.target = romeo;
                         pause();
                         scoreIndex = 0;
@@ -195,6 +206,10 @@ public class LevelController : MonoBehaviour
                         //ghostRend.sprite = ghostRomeo;
                         //<juliaAnim.Play("m_fleeing");
                         maxindexNow = maxindex;
+
+                        juliaAnim.SetBool("fleeing", true);
+                        romeoAnim.SetBool("fleeing", false);
+                        
                     }
                 }
                 else
@@ -223,18 +238,22 @@ public class LevelController : MonoBehaviour
                         //romeo.SetActive(false);
                         romeosTurnNext = true;
                         juliaMove.dead = false;
-                        ghost.SetActive(true);
+                        rghost.SetActive(true);
+                        jghost.SetActive(false);
                         cf.target = julia;
                         index = 0;
-                        ghost.transform.position = path[ghostIndex];
+                        rghost.transform.position = path[ghostIndex];
                         pause();
                         maxindexNow = maxindex;
                         scoreIndex = 0;
                         printPath();
+                        juliaAnim.SetBool("fleeing", false);
+                        romeoAnim.SetBool("fleeing", true);
                         //ghostRend.sprite = ghostJulia;
                     }
                 }
-                ghost.transform.position = Vector3.MoveTowards(ghost.transform.position, targetPosition, Time.deltaTime * ghostSpeed);
+                rghost.transform.position = Vector3.MoveTowards(rghost.transform.position, targetPosition, Time.deltaTime * ghostSpeed);
+                jghost.transform.position = Vector3.MoveTowards(jghost.transform.position, targetPosition, Time.deltaTime * ghostSpeed);
 
 
             }
@@ -275,9 +294,9 @@ public class LevelController : MonoBehaviour
     private PlayerMovement romeoMove;
     private PlayerMovement juliaMove;
     //private SpriteRenderer ghostRend;
-    private Animator juliaAnim;
-    private Animator romeoAnim;
-    private Animator ghostAnim;
+    //private Animator juliaAnim;
+    //private Animator romeoAnim;
+    //private Animator ghostAnim;
 
     private float timer = 0f;
     private float startTime = 0f;
