@@ -14,8 +14,8 @@ public class LevelController : MonoBehaviour
     public uint pathLength = 1000;
     public float pathInterval = 0.01f;
     public float levelLength = 200;
-    private float speed = 3.0f;
-    private float ghostSpeed = 3.0f;
+    private float speed = 1.8f;
+    private float ghostSpeed = 1.8f;
 
 
 

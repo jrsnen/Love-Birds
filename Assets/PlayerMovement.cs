@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour {
     public bool dead = false;
     public bool ready = true;
 
+    public ParticleSystem leafParticles;
+
 
 	// Use this for initialization
 	void Start () {
@@ -51,6 +53,7 @@ public class PlayerMovement : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D other)
     {
         dead = true;
+        leafParticles.Play();
     }
 
 
