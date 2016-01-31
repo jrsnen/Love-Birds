@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class LevelController : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class LevelController : MonoBehaviour
     public GameObject ghost;
 
     public CameraFollow cf;
+
+    public Text scoreField;
 
     public uint pathLength = 1000;
     public float pathInterval = 0.01f;
@@ -108,6 +111,7 @@ public class LevelController : MonoBehaviour
                 {
                     if (julia.transform.position.y >= levelLength || juliaMove.dead)
                     {
+                        firstRound = false;
                         romeoMove.speed = speed;
                         romeo.SetActive(true);
                         romeo.transform.position = startPosition;
@@ -119,6 +123,7 @@ public class LevelController : MonoBehaviour
                         ghost.transform.position = path[ghostIndex];
                         cf.target = romeo;
                         pause();
+                        scoreIndex = 0;
                     }
                 }
                 else
@@ -137,9 +142,35 @@ public class LevelController : MonoBehaviour
                         ghost.transform.position = path[ghostIndex];
                         pause();
                         roundCounter++;
+                        scoreIndex = 0;
+                        
                     }
                 }
                 ghost.transform.position = Vector3.MoveTowards(ghost.transform.position, targetPosition, Time.deltaTime * ghostSpeed);
+
+                if (!firstRound)
+                {
+                    if (romeosTurnNext)
+                    {
+                        if (path[scoreIndex].y > julia.transform.position.y)
+                        {
+                            ++scoreIndex;
+
+                            if (2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
+                                juliascore += 2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x);
+                        }
+                    }
+                    else
+                    {
+                        if (path[scoreIndex].y > romeo.transform.position.y)
+                        {
+                            ++scoreIndex;
+
+                            if (2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
+                                romeoscore += 2 - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].x);
+                        }
+                    }
+                }
             }
         }
         else
@@ -148,6 +179,9 @@ public class LevelController : MonoBehaviour
             if( endScreen.IsDone() == false )
                 endScreen.MoveWindow( 4  );
         }
+
+        scoreField.text = "Julia's Score: " + juliascore + " Romeo's score: " + romeoscore;
+        
     }
 
     void ghostPath()
@@ -195,7 +229,7 @@ public class LevelController : MonoBehaviour
 
     private Vector3 targetPosition;
     private bool paused;
-
+    private bool firstRound = true;
 
 
     private bool romeosTurnNext;
@@ -207,5 +241,11 @@ public class LevelController : MonoBehaviour
     private float timeCap = 0.2f;
 
     private const uint ghostIndex = 0;
+
+
+    private uint scoreIndex = 0;
+
+    private float juliascore = 0;
+    private float romeoscore = 0;
     
 }
