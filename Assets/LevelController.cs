@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class LevelController : MonoBehaviour
 {
@@ -12,11 +13,20 @@ public class LevelController : MonoBehaviour
 
     public CameraFollow cf;
 
+    public Text playerOne;
+    public Text playerTwo;
+
     public uint pathLength = 1000;
+    
+    
     public float pathInterval = 0.01f;
+    public float pathNodeDistance = 1.0f;
+
     public float levelLength = 200;
-    private float speed = 1.8f;
-    private float ghostSpeed = 1.8f;
+    private float speed = 3.0f;
+    private float ghostSpeed = 3.0f;
+
+    public GameObject pathObject;
 
     public GUIMove startGUI;
     public GUIMove endScreen;
@@ -106,8 +116,13 @@ public class LevelController : MonoBehaviour
                 //Debug.Log("julia Y: " + julia.transform.position.y);
                 if (romeosTurnNext)
                 {
+
+                    //if()
+
+                    // died or finished
                     if (julia.transform.position.y >= levelLength || juliaMove.dead)
                     {
+                        firstRound = false;
                         romeoMove.speed = speed;
                         romeo.SetActive(true);
                         romeo.transform.position = startPosition;
@@ -119,6 +134,8 @@ public class LevelController : MonoBehaviour
                         ghost.transform.position = path[ghostIndex];
                         cf.target = romeo;
                         pause();
+                        scoreIndex = 0;
+                        printPath();
                     }
                 }
                 else
@@ -137,9 +154,35 @@ public class LevelController : MonoBehaviour
                         ghost.transform.position = path[ghostIndex];
                         pause();
                         roundCounter++;
+                        scoreIndex = 0;
+                        printPath();
                     }
                 }
                 ghost.transform.position = Vector3.MoveTowards(ghost.transform.position, targetPosition, Time.deltaTime * ghostSpeed);
+
+                if (!firstRound)
+                {
+                    if (romeosTurnNext)
+                    {
+                        if (path[scoreIndex].y > julia.transform.position.y)
+                        {
+                            ++scoreIndex;
+
+                            if (2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
+                                juliascore += 2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x);
+                        }
+                    }
+                    else
+                    {
+                        if (path[scoreIndex].y > romeo.transform.position.y)
+                        {
+                            ++scoreIndex;
+
+                            if (2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
+                                romeoscore += 2 - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].x);
+                        }
+                    }
+                }
             }
         }
         else
@@ -148,6 +191,11 @@ public class LevelController : MonoBehaviour
             if( endScreen.IsDone() == false )
                 endScreen.MoveWindow( 4  );
         }
+
+        playerOne.text = juliascore.ToString();
+        playerTwo.text = romeoscore.ToString();
+        //scoreField.text = "Julia's Score: " + juliascore + " Romeo's score: " + romeoscore;
+        
     }
 
     void ghostPath()
@@ -179,15 +227,15 @@ public class LevelController : MonoBehaviour
         ++index;
     }
 
-    //void printPath()
-    //{
-    //    for (uint i = 0; i < index; ++i)
-    //    {
-    //        Vector3 v = new Vector3(path[i], pathInterval * i, 0);
-    //        Instantiate(pathObject, v - startPosition, transform.rotation);
-    //        Debug.Log("Path x: " + path[i]);
-    //    }
-    //}
+    void printPath()
+    {
+        for (uint i = 0; i < maxindex; ++i)
+        {
+
+            Instantiate(pathObject,path[i], transform.rotation);
+            Debug.Log("Path x: " + path[i]);
+        }
+    }
 
     private uint index;
     private uint maxindex;
@@ -195,7 +243,7 @@ public class LevelController : MonoBehaviour
 
     private Vector3 targetPosition;
     private bool paused;
-
+    private bool firstRound = true;
 
 
     private bool romeosTurnNext;
@@ -207,5 +255,11 @@ public class LevelController : MonoBehaviour
     private float timeCap = 0.2f;
 
     private const uint ghostIndex = 0;
+
+
+    private uint scoreIndex = 0;
+
+    private float juliascore = 0;
+    private float romeoscore = 0;
     
 }
