@@ -85,6 +85,82 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &190938085
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 144402, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 190938086}
+  - 222: {fileID: 190938088}
+  - 114: {fileID: 190938087}
+  m_Layer: 5
+  m_Name: Credits
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &190938086
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 22413308, guid: 5f701169013719948a2d7eb5a1506490,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 190938085}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2043429071}
+  m_RootOrder: 4
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 3.1, y: -134.3}
+  m_SizeDelta: {x: 118.9, y: 67.1}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &190938087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11401134, guid: 5f701169013719948a2d7eb5a1506490,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 190938085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.6764706, g: 0.6513386, b: 0.4974048, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 1adc19dd81e0ab14fba1ab5a2a054311, type: 3}
+    m_FontSize: 12
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: "Made by\nPaula Ylinen\nJuhani Hujala\nJoni R\xE4s\xE4nen"
+--- !u!222 &190938088
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 22291032, guid: 5f701169013719948a2d7eb5a1506490,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 190938085}
 --- !u!1 &678190194
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,7 +428,7 @@ Prefab:
     - target: {fileID: 11482050, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: c1f39bfcc5e08294a8d94832fffbf5ae,
+      objectReference: {fileID: 21300000, guid: 5f0a6764df9ca0a439eae303dfab7fb5,
         type: 3}
     - target: {fileID: 11482050, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
       propertyPath: m_Type
@@ -360,7 +436,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22456008, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 88.7
+      value: 79
       objectReference: {fileID: 0}
     - target: {fileID: 22413308, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
       propertyPath: m_AnchoredPosition.y
@@ -368,7 +444,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22413308, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: -23.4
+      value: -28.2
       objectReference: {fileID: 0}
     - target: {fileID: 22418550, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
       propertyPath: m_AnchoredPosition.x
@@ -388,7 +464,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22480890, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: -20.5
+      value: -25.3
       objectReference: {fileID: 0}
     - target: {fileID: 22409016, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
       propertyPath: m_AnchoredPosition.y
@@ -396,7 +472,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22409016, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 76.1
+      value: 76.8
       objectReference: {fileID: 0}
     - target: {fileID: 11450374, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
       propertyPath: m_Text
@@ -456,7 +532,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22451244, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -209.6
+      value: -196
       objectReference: {fileID: 0}
     - target: {fileID: 22451244, guid: 5f701169013719948a2d7eb5a1506490, type: 2}
       propertyPath: m_SizeDelta.x
