@@ -9,3 +9,5 @@ EditorBuildSettings:
     path: Assets/OpenScene.unity
   - enabled: 1
     path: Assets/scenet/first.unity
+  - enabled: 1
+    path: Assets/EndScene.unity
