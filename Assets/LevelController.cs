@@ -11,11 +11,18 @@ public class LevelController : MonoBehaviour
     public GameObject julia;
     public GameObject ghost;
 
+    //public Animation juliaAnim;
+    //public Animation romeoAnim;
+
+
+    //public Sprite ghostJulia;
+    //public Sprite ghostRomeo;
+
     public CameraFollow cf;
 
     public Text playerOne;
     public Text playerTwo;
-
+    public AudioSource coinAudio;
     public uint pathLength = 1000;
     
     
@@ -25,7 +32,7 @@ public class LevelController : MonoBehaviour
 
     public float levelLength = 200;
     private float speed = 3.0f;
-    private float ghostSpeed = 4.0f;
+    private float ghostSpeed = 3.5f;
 
     public GameObject pathObject;
 
@@ -49,7 +56,8 @@ public class LevelController : MonoBehaviour
 
         juliaMove = julia.GetComponent<PlayerMovement>();
         romeoMove = romeo.GetComponent<PlayerMovement>();
-
+        //ghostRend = ghost.GetComponent<SpriteRenderer>();
+        juliaMove.speed = speed;
         juliaMove.ready = false;
         romeoMove.ready = false;
 
@@ -112,27 +120,35 @@ public class LevelController : MonoBehaviour
                 }
 
 
-                uint maxpoints = 10;
+                uint maxpoints = 2;
                 if (!firstRound)
                 {
                     if (romeosTurnNext)
                     {
-                        if (path[scoreIndex].y < julia.transform.position.y)
+                        if (path[scoreIndex].y < julia.transform.position.y && scoreIndex <= maxindexNow)
                         {
                             ++scoreIndex;
 
                             if (maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
+                            {
+                                if(!coinAudio.isPlaying)
+                                    coinAudio.Play();
                                 juliascore += (uint)(maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x));
+                            }
                         }
                     }
                     else
                     {
-                        if (path[scoreIndex].y < romeo.transform.position.y)
+                        if (path[scoreIndex].y < romeo.transform.position.y && scoreIndex <= maxindexNow)
                         {
                             ++scoreIndex;
 
-                            if (maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
+                            if (maxpoints - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].x) > 0)
+                            {
+                                if (!coinAudio.isPlaying)
+                                    coinAudio.Play();
                                 romeoscore += (uint)(maxpoints - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].x));
+                            }
                         }
                     }
                 }
@@ -142,7 +158,7 @@ public class LevelController : MonoBehaviour
                 //Debug.Log("julia Y: " + julia.transform.position.y);
                 if (romeosTurnNext)
                 {
-                       if(!firstRound && index <= maxindex)
+                       if(!firstRound && index <= maxindexNow)
                        {
                            if (path[index].y < julia.transform.position.y + ghostDistance)
                             {
@@ -175,6 +191,9 @@ public class LevelController : MonoBehaviour
                         scoreIndex = 0;
                         printPath();
                         roundCounter++;
+                        //ghostRend.sprite = ghostRomeo;
+                        //<juliaAnim.Play("m_fleeing");
+                        maxindexNow = maxindex;
                     }
                 }
                 else
@@ -185,7 +204,7 @@ public class LevelController : MonoBehaviour
                         ++maxindex;
                         path[maxindex] = romeo.transform.position;
                     }
-                    if (!firstRound && index <= maxindex)
+                    if (!firstRound && index <= maxindexNow)
                     {
                         if (path[index].y - ghostDistance < romeo.transform.position.y)
                         {
@@ -208,9 +227,10 @@ public class LevelController : MonoBehaviour
                         index = 0;
                         ghost.transform.position = path[ghostIndex];
                         pause();
-
+                        maxindexNow = maxindex;
                         scoreIndex = 0;
                         printPath();
+                        //ghostRend.sprite = ghostJulia;
                     }
                 }
                 ghost.transform.position = Vector3.MoveTowards(ghost.transform.position, targetPosition, Time.deltaTime * ghostSpeed);
@@ -243,6 +263,7 @@ public class LevelController : MonoBehaviour
 
     private uint index;
     private uint maxindex;
+    private uint maxindexNow = 0;
     private Vector3[] path;
 
     private Vector3 targetPosition;
@@ -252,15 +273,20 @@ public class LevelController : MonoBehaviour
     private bool romeosTurnNext;
     private PlayerMovement romeoMove;
     private PlayerMovement juliaMove;
+    //private SpriteRenderer ghostRend;
+    private Animator juliaAnim;
+    private Animator romeoAnim;
+    private Animator ghostAnim;
 
     private float timer = 0f;
     private float startTime = 0f;
-    private float timeCap = 0.2f;
+    private float timeCap = 1.0f;
 
     private const uint ghostIndex = 0;
 
 
     private uint scoreIndex = 0;
+    private uint lastScore = 0;
 
     private uint juliascore = 0;
     private uint romeoscore = 0;
