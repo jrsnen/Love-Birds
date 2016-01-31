@@ -64,7 +64,6 @@ public class LevelController : MonoBehaviour
     void pause()
     {
         paused = true;
-       // CancelInvoke();
         if (romeosTurnNext)
             romeoMove.ready = false;
         else
@@ -73,10 +72,6 @@ public class LevelController : MonoBehaviour
     void unpause()
     {
         paused = false;
-        InvokeRepeating("ghostPath", 0, pathInterval);
-       
-
-
         startTime = Time.time;
 
     }
@@ -116,6 +111,29 @@ public class LevelController : MonoBehaviour
                         juliaMove.ready = true;
                 }
 
+                if (!firstRound)
+                {
+                    if (romeosTurnNext)
+                    {
+                        if (path[scoreIndex].y > julia.transform.position.y)
+                        {
+                            ++scoreIndex;
+
+                            if (2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
+                                juliascore += (uint)(2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x));
+                        }
+                    }
+                    else
+                    {
+                        if (path[scoreIndex].y > romeo.transform.position.y)
+                        {
+                            ++scoreIndex;
+
+                            if (2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
+                                romeoscore += (uint)(2 - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].x));
+                        }
+                    }
+                }
 
 
 
@@ -194,29 +212,7 @@ public class LevelController : MonoBehaviour
                 }
                 ghost.transform.position = Vector3.MoveTowards(ghost.transform.position, targetPosition, Time.deltaTime * ghostSpeed);
 
-                if (!firstRound)
-                {
-                    if (romeosTurnNext)
-                    {
-                        if (path[scoreIndex].y > julia.transform.position.y)
-                        {
-                            ++scoreIndex;
 
-                            if (2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
-                                juliascore += 2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x);
-                        }
-                    }
-                    else
-                    {
-                        if (path[scoreIndex].y > romeo.transform.position.y)
-                        {
-                            ++scoreIndex;
-
-                            if (2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
-                                romeoscore += 2 - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].x);
-                        }
-                    }
-                }
             }
         }
         else
@@ -230,36 +226,6 @@ public class LevelController : MonoBehaviour
         playerTwo.text = romeoscore.ToString();
         //scoreField.text = "Julia's Score: " + juliascore + " Romeo's score: " + romeoscore;
         
-    }
-
-    void ghostPath()
-    {
-        //Debug.Log("Index:" + index + "/" + maxindex);
-        ////if (maxindex <= index)
-        ////{
-        ////    // record path
-        ////    Debug.Log("Path length: " + index + "/" + pathLength);
-        ////    if(romeosTurnNext)
-        ////    {
-        ////        path[index] = julia.transform.position;
-        ////    }
-        ////    else
-        ////        path[index] = romeo.transform.position;
-
-            
-        ////    //path[index] = julia.transform.position.x;
-        ////    Debug.Log("Path x: " + path[index]);
-        ////    ++maxindex;
-        ////}
-        ////else
-        //if (maxindex > index + ghostIndex )
-        //{
-        //    Debug.Log("Ghosting");
-        //    //ghost.transform.position = path[index];
-        //    targetPosition = path[index + ghostIndex];
-        //    // 
-        //}
-        //++index;
     }
 
     void printPath()
@@ -280,7 +246,6 @@ public class LevelController : MonoBehaviour
     private bool paused;
     private bool firstRound = true;
 
-
     private bool romeosTurnNext;
     private PlayerMovement romeoMove;
     private PlayerMovement juliaMove;
@@ -294,7 +259,7 @@ public class LevelController : MonoBehaviour
 
     private uint scoreIndex = 0;
 
-    private float juliascore = 0;
-    private float romeoscore = 0;
+    private uint juliascore = 1;
+    private uint romeoscore = 0;
     
 }

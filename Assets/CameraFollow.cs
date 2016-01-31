@@ -25,7 +25,8 @@ public class CameraFollow : MonoBehaviour {
 
 			interpVelocity = targetDirection.magnitude * 5f;
 
-			targetPos = transform.position + (targetDirection.normalized * interpVelocity * Time.deltaTime); 
+			targetPos = transform.position + (targetDirection.normalized * interpVelocity * Time.deltaTime);
+            targetPos.x = 0;
 
 			transform.position = Vector3.Lerp( transform.position, targetPos + offset, 0.25f);
 
