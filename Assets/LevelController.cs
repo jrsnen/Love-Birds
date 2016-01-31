@@ -79,9 +79,9 @@ public class LevelController : MonoBehaviour
     void Update()
     {
 
-        roundCounterText.text = "Round: "+roundCounter;
+        roundCounterText.text = "Round: "+(roundCounter -1);
 
-        if (roundCounter < 6 )
+        if (roundCounter < 4 )
         {
 
 
@@ -111,26 +111,28 @@ public class LevelController : MonoBehaviour
                         juliaMove.ready = true;
                 }
 
+
+                uint maxpoints = 10;
                 if (!firstRound)
                 {
                     if (romeosTurnNext)
                     {
-                        if (path[scoreIndex].y > julia.transform.position.y)
+                        if (path[scoreIndex].y < julia.transform.position.y)
                         {
                             ++scoreIndex;
 
-                            if (2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
-                                juliascore += (uint)(2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x));
+                            if (maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
+                                juliascore += (uint)(maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x));
                         }
                     }
                     else
                     {
-                        if (path[scoreIndex].y > romeo.transform.position.y)
+                        if (path[scoreIndex].y < romeo.transform.position.y)
                         {
                             ++scoreIndex;
 
-                            if (2 - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
-                                romeoscore += (uint)(2 - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].x));
+                            if (maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
+                                romeoscore += (uint)(maxpoints - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].x));
                         }
                     }
                 }
@@ -172,6 +174,7 @@ public class LevelController : MonoBehaviour
                         pause();
                         scoreIndex = 0;
                         printPath();
+                        roundCounter++;
                     }
                 }
                 else
@@ -205,7 +208,7 @@ public class LevelController : MonoBehaviour
                         index = 0;
                         ghost.transform.position = path[ghostIndex];
                         pause();
-                        roundCounter++;
+
                         scoreIndex = 0;
                         printPath();
                     }
@@ -259,7 +262,7 @@ public class LevelController : MonoBehaviour
 
     private uint scoreIndex = 0;
 
-    private uint juliascore = 1;
+    private uint juliascore = 0;
     private uint romeoscore = 0;
     
 }
