@@ -49,6 +49,7 @@
      <Compile Include="Assets\LevelController.cs" />
      <Compile Include="Assets\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\GUIMove.cs" />
+     <Compile Include="Assets\Scripts\GoalTrigger.cs" />
      <Compile Include="Assets\Scripts\LoadScene.cs" />
      <None Include="Assets\Plugins\GoKit\easing\easeEquationsLicense.txt" />
  <Reference Include="UnityEngine.UI">
