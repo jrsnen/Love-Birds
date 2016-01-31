@@ -48,12 +48,19 @@
      <Compile Include="Assets\CameraFollow.cs" />
      <Compile Include="Assets\LevelController.cs" />
      <Compile Include="Assets\PlayerMovement.cs" />
+     <Compile Include="Assets\Scripts\GUIMove.cs" />
+     <Compile Include="Assets\Scripts\LoadScene.cs" />
+     <None Include="Assets\Plugins\GoKit\easing\easeEquationsLicense.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity 3.2/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>C:/Program Files/Unity 3.2/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{4A8016D6-689A-EE69-3B21-31D1F25D9AC6}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

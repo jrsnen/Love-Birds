@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -17,9 +18,13 @@ public class LevelController : MonoBehaviour
     private float speed = 1.8f;
     private float ghostSpeed = 1.8f;
 
-
+    public GUIMove startGUI;
+    public GUIMove endScreen;
+    public Text roundCounterText; 
 
     public Vector3 startPosition = new Vector3(0, 0, 0);
+
+    private int roundCounter = 0;
 
 
     // Use this for initialization
@@ -38,6 +43,9 @@ public class LevelController : MonoBehaviour
         romeoMove.ready = false;
 
         paused = true;
+
+        //SEt GUi
+        startGUI.InitPosition();
     }
 
     void pause()
@@ -62,24 +70,38 @@ public class LevelController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (paused)
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                unpause();
-            }
-        }
-        else
-        {
-            timer = Time.time - startTime;
 
-            if (timer > timeCap)
+        roundCounterText.text = "Round: "+roundCounter;
+
+        if (roundCounter < 6 )
+        {
+
+
+            if (paused)
             {
-                if (!romeosTurnNext)
-                    romeoMove.ready = true;
-                else
-                    juliaMove.ready = true;
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    unpause();
+
+                    if (startGUI.IsDone() == false)
+                    {
+                        startGUI.MoveWindow(1);
+                    }
+
+                }
             }
+            else
+            {
+                timer = Time.time - startTime;
+
+                if (timer > timeCap)
+                {
+
+                    if (!romeosTurnNext)
+                        romeoMove.ready = true;
+                    else
+                        juliaMove.ready = true;
+                }
 
                 //Debug.Log("julia Y: " + julia.transform.position.y);
                 if (romeosTurnNext)
@@ -114,11 +136,18 @@ public class LevelController : MonoBehaviour
                         index = 0;
                         ghost.transform.position = path[ghostIndex];
                         pause();
+                        roundCounter++;
                     }
                 }
                 ghost.transform.position = Vector3.MoveTowards(ghost.transform.position, targetPosition, Time.deltaTime * ghostSpeed);
             }
-        
+        }
+        else
+        {
+            //Show the score Screen
+            if( endScreen.IsDone() == false )
+                endScreen.MoveWindow( 4  );
+        }
     }
 
     void ghostPath()
