@@ -68,7 +68,9 @@ public class LevelController : MonoBehaviour
         juliaAnim.SetBool("fleeing", true);
         paused = true;
 
-        Coin c = new Coin { picked =true, coin = pathObject, position = startPosition };
+        Coin c = new Coin { picked = false, 
+            coin = (GameObject)Instantiate(pathObject, startPosition, transform.rotation),
+            position = startPosition };
         path.Add(c);
 
         //SEt GUi
@@ -133,21 +135,26 @@ public class LevelController : MonoBehaviour
                 {
                     if (romeosTurnNext)
                     {
-                        if (path[scoreIndex].position.y < julia.transform.position.y && scoreIndex <= maxindexNow)
+                        if (scoreIndex <= maxindexNow && path[scoreIndex].position.y < julia.transform.position.y)
                         {
                             ++scoreIndex;
 
                             if (maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].position.x) > 0)
                             {
-                                if(!coinAudio.isPlaying)
-                                    coinAudio.Play();
-                                juliascore += (uint)(maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].position.x));
+                                if(!path[scoreIndex].picked)
+                                {
+                                    //path[scoreIndex].picked = true;
+                                    if (!coinAudio.isPlaying)
+                                        coinAudio.Play();
+                                    juliascore += (uint)(maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].position.x));
+                                }
+
                             }
                         }
                     }
                     else
                     {
-                        if (path[scoreIndex].position.y < romeo.transform.position.y && scoreIndex <= maxindexNow)
+                        if (scoreIndex <= maxindexNow && path[scoreIndex].position.y < romeo.transform.position.y)
                         {
                             ++scoreIndex;
 
@@ -175,7 +182,9 @@ public class LevelController : MonoBehaviour
                     if(path[path.Count - 1].position.y + pathNodeDistance < julia.transform.position.y)
                     {
                         // eka node asetetaan startissa
-                        Coin c = new Coin { picked = false, coin = pathObject, position = julia.transform.position };
+                        Coin c = new Coin { picked = false,
+                            coin = (GameObject)Instantiate(pathObject, julia.transform.position, transform.rotation), 
+                            position = julia.transform.position };
                         path.Add(c);
                         ++juliascore;
                     }
@@ -199,7 +208,6 @@ public class LevelController : MonoBehaviour
                         cf.target = romeo;
                         pause();
                         scoreIndex = 0;
-                        printPath();
                         //if(!firstRound)
                             roundCounter++;
                         //ghostRend.sprite = ghostRomeo;
@@ -217,7 +225,9 @@ public class LevelController : MonoBehaviour
                     {
                         // eka node asetetaan startissa
                         // add a coin and a point for romeo
-                        Coin c = new Coin{picked = false, coin= pathObject, position = romeo.transform.position};
+                        Coin c = new Coin { picked = false,
+                            coin = (GameObject)Instantiate(pathObject, romeo.transform.position, transform.rotation),
+                            position = romeo.transform.position };
                         path.Add(c);
                         ++romeoscore;
                     }
@@ -248,7 +258,6 @@ public class LevelController : MonoBehaviour
                         pause();
                         maxindexNow = path.Count - 1;
                         scoreIndex = 0;
-                        printPath();
                         juliaAnim.SetBool("fleeing", false);
                         romeoAnim.SetBool("fleeing", true);
                         //ghostRend.sprite = ghostJulia;
@@ -274,15 +283,6 @@ public class LevelController : MonoBehaviour
         playerTwofinal.text = romeoscore.ToString();
         //scoreField.text = "Julia's Score: " + juliascore + " Romeo's score: " + romeoscore;
         
-    }
-
-    void printPath()
-    {
-        for (int i = 0; i < path.Count; ++i)
-        {
-
-            Instantiate(path[i].coin, path[i].position, transform.rotation);
-        }
     }
 
     private int ghostIndex;
