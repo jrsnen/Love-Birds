@@ -143,6 +143,10 @@ public class LevelController : MonoBehaviour
                             {
                                 if(!path[scoreIndex].picked)
                                 {
+                                    Coin c = path[scoreIndex];
+                                    c.picked = true;
+                                    Destroy(c.coin);
+                                    path[scoreIndex] = c;
                                     //path[scoreIndex].picked = true;
                                     if (!coinAudio.isPlaying)
                                         coinAudio.Play();
@@ -160,9 +164,16 @@ public class LevelController : MonoBehaviour
 
                             if (maxpoints - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].position.x) > 0)
                             {
-                                if (!coinAudio.isPlaying)
-                                    coinAudio.Play();
-                                romeoscore += (uint)(maxpoints - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].position.x));
+                                if (!path[scoreIndex].picked)
+                                {
+                                    Coin c = path[scoreIndex];
+                                    c.picked = true;
+                                    Destroy(c.coin);
+                                    path[scoreIndex] = c;
+                                    if (!coinAudio.isPlaying)
+                                        coinAudio.Play();
+                                    romeoscore += (uint)(maxpoints - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].position.x));
+                                }
                             }
                         }
                     }
