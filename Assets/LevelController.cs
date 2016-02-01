@@ -15,10 +15,6 @@ public class LevelController : MonoBehaviour
     //public Animation juliaAnim;
     //public Animation romeoAnim;
 
-
-    //public Sprite ghostJulia;
-    //public Sprite ghostRomeo;
-
     public CameraFollow cf;
 
     public Text playerOne;
@@ -26,7 +22,6 @@ public class LevelController : MonoBehaviour
     public Text playerOnefinal;
     public Text playerTwofinal;
     public AudioSource coinAudio;
-    public uint pathLength = 1000;
 
     public Animator juliaAnim;
     public Animator romeoAnim;
@@ -57,8 +52,8 @@ public class LevelController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        path = new Vector3[pathLength];
-        index = 0;
+        //path = new Vector3[pathLength];
+        ghostIndex = 0;
         romeosTurnNext = true;
         romeo.SetActive(false);
         rghost.SetActive(false);
@@ -71,11 +66,10 @@ public class LevelController : MonoBehaviour
         juliaMove.ready = false;
         romeoMove.ready = false;
         juliaAnim.SetBool("fleeing", true);
-        rghostAnim.SetBool("fleeing", true);
-        jghostAnim.SetBool("fleeing", true);
         paused = true;
 
-        path[0] = startPosition;
+        Coin c = new Coin { picked =true, coin = pathObject, position = startPosition };
+        path.Add(c);
 
         //SEt GUi
         startGUI.InitPosition();
@@ -132,57 +126,58 @@ public class LevelController : MonoBehaviour
                 }
 
 
+
+                // check for score addition
                 uint maxpoints = 2;
                 if (!firstRound)
                 {
                     if (romeosTurnNext)
                     {
-                        if (path[scoreIndex].y < julia.transform.position.y && scoreIndex <= maxindexNow)
+                        if (path[scoreIndex].position.y < julia.transform.position.y && scoreIndex <= maxindexNow)
                         {
                             ++scoreIndex;
 
-                            if (maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x) > 0)
+                            if (maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].position.x) > 0)
                             {
                                 if(!coinAudio.isPlaying)
                                     coinAudio.Play();
-                                juliascore += (uint)(maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].x));
+                                juliascore += (uint)(maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].position.x));
                             }
                         }
                     }
                     else
                     {
-                        if (path[scoreIndex].y < romeo.transform.position.y && scoreIndex <= maxindexNow)
+                        if (path[scoreIndex].position.y < romeo.transform.position.y && scoreIndex <= maxindexNow)
                         {
                             ++scoreIndex;
 
-                            if (maxpoints - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].x) > 0)
+                            if (maxpoints - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].position.x) > 0)
                             {
                                 if (!coinAudio.isPlaying)
                                     coinAudio.Play();
-                                romeoscore += (uint)(maxpoints - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].x));
+                                romeoscore += (uint)(maxpoints - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].position.x));
                             }
                         }
                     }
                 }
 
-
-
-                //Debug.Log("julia Y: " + julia.transform.position.y);
+                // check for new coins
                 if (romeosTurnNext)
                 {
-                       if(!firstRound && index <= maxindexNow)
+                       if(!firstRound && ghostIndex <= maxindexNow)
                        {
-                           if (path[index].y < julia.transform.position.y + ghostDistance)
+                           if (path[ghostIndex].position.y < julia.transform.position.y + ghostDistance)
                             {
-                                targetPosition = path[index];
-                                ++index;
+                                targetPosition = path[ghostIndex].position;
+                                ++ghostIndex;
                             }
                        }
-                    if(path[maxindex].y + pathNodeDistance < julia.transform.position.y)
+                    if(path[path.Count - 1].position.y + pathNodeDistance < julia.transform.position.y)
                     {
                         // eka node asetetaan startissa
-                        ++maxindex;
-                        path[maxindex] = julia.transform.position;
+                        Coin c = new Coin { picked = false, coin = pathObject, position = julia.transform.position };
+                        path.Add(c);
+                        ++juliascore;
                     }
 
                     // died or finished
@@ -195,11 +190,12 @@ public class LevelController : MonoBehaviour
                         //julia.SetActive(false);
                         romeosTurnNext = false;
                         romeoMove.dead = false;
-                        index = 0;
+                        ghostIndex = 0;
                         rghost.SetActive(false);
                         jghost.SetActive(true);
-                        rghost.transform.position = path[ghostIndex];
-                        jghost.transform.position = path[ghostIndex];
+                        jghostAnim.SetBool("fleeing", true);
+                        rghost.transform.position = path[0].position;
+                        jghost.transform.position = path[0].position;
                         cf.target = romeo;
                         pause();
                         scoreIndex = 0;
@@ -208,7 +204,7 @@ public class LevelController : MonoBehaviour
                             roundCounter++;
                         //ghostRend.sprite = ghostRomeo;
                         //<juliaAnim.Play("m_fleeing");
-                        maxindexNow = maxindex;
+                        maxindexNow = path.Count - 1;
 
                         juliaAnim.SetBool("fleeing", true);
                         romeoAnim.SetBool("fleeing", false);
@@ -217,21 +213,22 @@ public class LevelController : MonoBehaviour
                 }
                 else
                 {
-                    if (path[maxindex].y + pathNodeDistance < romeo.transform.position.y)
+                    if (path[path.Count - 1].position.y + pathNodeDistance < romeo.transform.position.y)
                     {
                         // eka node asetetaan startissa
-                        ++maxindex;
-                        path[maxindex] = romeo.transform.position;
+                        // add a coin and a point for romeo
+                        Coin c = new Coin{picked = false, coin= pathObject, position = romeo.transform.position};
+                        path.Add(c);
+                        ++romeoscore;
                     }
-                    if (!firstRound && index <= maxindexNow)
+                    if (!firstRound && ghostIndex <= maxindexNow)
                     {
-                        if (path[index].y - ghostDistance < romeo.transform.position.y)
+                        if (path[ghostIndex].position.y - ghostDistance < romeo.transform.position.y)
                         {
-                            targetPosition = path[index];
-                            ++index;
+                            targetPosition = path[ghostIndex].position;
+                            ++ghostIndex;
                         }
                     }
-
 
                     if (romeo.transform.position.y >= levelLength || romeoMove.dead)
                     {
@@ -242,13 +239,14 @@ public class LevelController : MonoBehaviour
                         romeosTurnNext = true;
                         juliaMove.dead = false;
                         rghost.SetActive(true);
+                        rghostAnim.SetBool("fleeing", true);
                         jghost.SetActive(false);
                         cf.target = julia;
-                        index = 0;
-                        rghost.transform.position = path[ghostIndex];
-                        jghost.transform.position = path[ghostIndex];
+                        ghostIndex = 0;
+                        rghost.transform.position = path[0].position;
+                        jghost.transform.position = path[0].position;
                         pause();
-                        maxindexNow = maxindex;
+                        maxindexNow = path.Count - 1;
                         scoreIndex = 0;
                         printPath();
                         juliaAnim.SetBool("fleeing", false);
@@ -280,18 +278,17 @@ public class LevelController : MonoBehaviour
 
     void printPath()
     {
-        for (uint i = 0; i < maxindex; ++i)
+        for (int i = 0; i < path.Count; ++i)
         {
 
-            Instantiate(pathObject,path[i], transform.rotation);
-            Debug.Log("Path x: " + path[i]);
+            Instantiate(path[i].coin, path[i].position, transform.rotation);
         }
     }
 
-    private uint index;
-    private uint maxindex;
-    private uint maxindexNow = 0;
-    private Vector3[] path;
+    private int ghostIndex;
+    private int maxindexNow = 0;
+    //private Vector3[] path;
+    private List<Coin> path = new List<Coin>();
 
     private Vector3 targetPosition;
     private bool paused;
@@ -309,13 +306,18 @@ public class LevelController : MonoBehaviour
     private float startTime = 0f;
     private float timeCap = 0.2f;
 
-    private const uint ghostIndex = 0;
-
-
-    private uint scoreIndex = 0;
+    private int scoreIndex = 0;
     private uint lastScore = 0;
 
     private uint juliascore = 0;
     private uint romeoscore = 0;
     
+}
+
+
+struct Coin
+{
+    public bool picked;
+    public GameObject coin;
+    public Vector3 position;
 }
