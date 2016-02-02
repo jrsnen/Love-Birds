@@ -137,9 +137,9 @@ public class LevelController : MonoBehaviour
                     {
                         if (scoreIndex <= maxindexNow && path[scoreIndex].position.y < julia.transform.position.y)
                         {
-                            ++scoreIndex;
+                            
 
-                            if (maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].position.x) > 0)
+                            if (Mathf.Abs(julia.transform.position.x - path[scoreIndex].position.x) < 0.5f)
                             {
                                 if(!path[scoreIndex].picked)
                                 {
@@ -150,19 +150,20 @@ public class LevelController : MonoBehaviour
                                     //path[scoreIndex].picked = true;
                                     if (!coinAudio.isPlaying)
                                         coinAudio.Play();
-                                    juliascore += (uint)(maxpoints - Mathf.Abs(julia.transform.position.x - path[scoreIndex].position.x));
+                                    ++juliascore;
                                 }
 
                             }
+                            ++scoreIndex;
                         }
                     }
                     else
                     {
                         if (scoreIndex <= maxindexNow && path[scoreIndex].position.y < romeo.transform.position.y)
                         {
-                            ++scoreIndex;
+                            
 
-                            if (maxpoints - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].position.x) > 0)
+                            if (Mathf.Abs(romeo.transform.position.x - path[scoreIndex].position.x) < 0.5f)
                             {
                                 if (!path[scoreIndex].picked)
                                 {
@@ -172,9 +173,10 @@ public class LevelController : MonoBehaviour
                                     path[scoreIndex] = c;
                                     if (!coinAudio.isPlaying)
                                         coinAudio.Play();
-                                    romeoscore += (uint)(maxpoints - Mathf.Abs(romeo.transform.position.x - path[scoreIndex].position.x));
+                                    ++romeoscore;
                                 }
                             }
+                            ++scoreIndex;
                         }
                     }
                 }
@@ -322,7 +324,7 @@ public class LevelController : MonoBehaviour
 
     private uint juliascore = 0;
     private uint romeoscore = 0;
-    
+
 }
 
 
