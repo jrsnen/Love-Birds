@@ -34,7 +34,6 @@ public class LevelController : MonoBehaviour
     public float pathNodeDistance = 1.0f;
     public float ghostDistance = 10.0f;
 
-    public float levelLength = 200;
     private float speed = 3.0f;
     private float ghostSpeed = 3.5f;
 
@@ -203,7 +202,7 @@ public class LevelController : MonoBehaviour
                     }
 
                     // died or finished
-                    if (julia.transform.position.y >= levelLength || juliaMove.dead)
+                    if (juliaMove.dead)
                     {
                         firstRound = false;
                         romeoMove.speed = speed;
@@ -253,7 +252,7 @@ public class LevelController : MonoBehaviour
                         }
                     }
 
-                    if (romeo.transform.position.y >= levelLength || romeoMove.dead)
+                    if (romeoMove.dead)
                     {
                         juliaMove.speed = speed;
                         julia.SetActive(true);

@@ -51,7 +51,6 @@
      <Compile Include="Assets\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\Flashing.cs" />
      <Compile Include="Assets\Scripts\GUIMove.cs" />
-     <Compile Include="Assets\Scripts\GoalTrigger.cs" />
      <Compile Include="Assets\Scripts\LoadScene.cs" />
      <Compile Include="Assets\Scripts\score.cs" />
      <None Include="Assets\Plugins\GoKit\easing\easeEquationsLicense.txt" />
