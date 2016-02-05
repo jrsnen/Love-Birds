@@ -10,8 +10,6 @@ public class LevelGenerator : MonoBehaviour {
     public GameObject background;
 
     public const float lookAhead = 25;
-    public const float maxLookAhead = 75;
-
 
     struct Candidate
     {
@@ -21,19 +19,21 @@ public class LevelGenerator : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        bool succeed = false;
-        while (!succeed)
+        int loopMax = 500;
+        List<bool> firstRow = new List<bool>(new bool[] { true, false, false, false, false, false, true });
+        createRow(firstRow);
+        ++yGenerated;
+        while (lookAhead > yGenerated && loopMax > 0)
         {
-            if (!initialized)
-                initializeGeneration();
-            succeed = onePass();
+            generateRow();
+            --loopMax;
         }
-        createLevel();
+        if (loopMax == 0)
+            Debug.Log("Startloop failed");
 
         juliaMove = julia.GetComponent<PlayerMovement>();
         romeoMove = romeo.GetComponent<PlayerMovement>();
 	}
-
 
     bool randomBool()
     {
@@ -53,129 +53,85 @@ public class LevelGenerator : MonoBehaviour {
        
     }
 
-    void initializeGeneration()
+    void generateRow()
     {
-        Debug.Log("Generating section");
-        endings = new bool[] { false, false, false, false, false, false, false };
-
-        if (yGenerated > 49.9f)
-            objectDensity = 0.75f;
-
-        //generate a random level
-        section = new List<List<bool>>();
-        for (uint i = 0; i < 25; ++i)
+        bool legal = false;
+        List<bool> row = new List<bool>();
+        // create row
+        while (!legal)
         {
+
             bool[] content;
-            if (i == 0)
-                content = new bool[] { true, 
-                    randomBool() && !openings[1], 
-                    randomBool() && !openings[2],
-                    randomBool() && !openings[3],
-                    randomBool() && !openings[4],
-                    randomBool() && !openings[5], 
-                    true};
-            else
-                content = new bool[] { true, randomBool(), randomBool(), randomBool(), randomBool(), randomBool(), true };
-            List<bool> row = new List<bool>( content );
-            section.Add(row);
+            content = new bool[] { true, 
+                randomBool(), 
+                randomBool(),
+                randomBool(),
+                randomBool(),
+                randomBool(), 
+                true};
+            row = new List<bool>(content);
+
+            legal = checkRow(row);
+
         }
 
-        // add start points
-        candidates = new List<Vector2i>();
-        for (int i = 1; i < 6; ++i)
-        {
-            if (openings[i])
-            {
-                candidates.Add(new Vector2i(i, 0));
-            }
-        }
-
-        maxTime = 100;
-
-        initialized = true;
+        createRow(row);
+        ++yGenerated;
     }
 
-
-
-
-
-
     // returns whether section is finished
-    bool onePass()
+    bool checkRow(List<bool> row)
     {
-
-        Vector2i current = candidates[candidates.Count - 1];
-        candidates.RemoveAt(candidates.Count - 1);
-        Debug.Log("Candidate x,y: " + current.x + "," + current.y);
-
-        if (current.y == 24)
+        bool[] thisRowPath = new bool[] { false, false, false, false, false, false, false };
+        // go through last rows possiblilities
+        for (int i = 1; i < 6; ++i)
         {
-            endings[current.x] = true;
-            initialized = false;
+            if (lastRowPath[i])
+            {
+                if(!row[i])
+                {
+                    thisRowPath[i] = true;
+                    if(!row[i-1])
+                    {
+                        thisRowPath[i - 1] = true;
+                    }
+                    if(!row[i + 1])
+                    {
+                        thisRowPath[i + 1] = true;
+                    }
+
+                }
+            }
+        }
+        if (thisRowPath[1] || thisRowPath[2] || thisRowPath[3] || thisRowPath[4] || thisRowPath[5])
+        {
+            lastRowPath = thisRowPath;
             return true;
         }
-
-
-        if (!section[current.y + 1][current.x])
-        {
-
-            if (!section[current.y + 1][current.x - 1])
-            {
-                candidates.Add(new Vector2i(current.x - 1, current.y + 1));
-            }
-
-            if (!section[current.y + 1][current.x + 1])
-            {
-                candidates.Add(new Vector2i(current.x + 1, current.y + 1));
-            }
-
-            candidates.Add(new Vector2i(current.x, current.y + 1));
-
-        }
-        --maxTime;
-
-        if (candidates.Count == 0 || maxTime == 0)
-        {
-            initialized = false;
-            Debug.Log("Section rejected!");
-        }
-
         return false;
-}
-   
+    }
 
-
-    // creates level from generation
-    void createLevel()
+    void createRow(List<bool> row)
     {
-
-        openings = endings;
-
-
-        // create section
-        for (int i = 0; i < section.Count; ++i)
+        for (int i = 0; i < 7; ++i)
         {
-            for (int j = 0; j < section[i].Count; ++j)
-            {
-                if (section[i][j])
-                    Instantiate(bush, new Vector3(j + 0.5f, yGenerated + i, 0), transform.rotation);
-            }
+            if (row[i])
+                Instantiate(bush, new Vector3(i + 0.5f, yGenerated, 0), transform.rotation);
         }
+    }
 
-
+    void generateBackground()
+    {
         //add background
         Instantiate(background, new Vector3(3.5f, bgGenerated, 0), transform.rotation);
         Instantiate(background, new Vector3(3.5f, bgGenerated + 12.5f, 0), transform.rotation);
         bgGenerated += 25;
-        yGenerated += 25;
     }
-
-
-
 
 	// Update is called once per frame
 	void Update () 
     {
+        Debug.Log("Generation update");
         float yPosition = 0;
 
         if (julia.activeSelf && !juliaMove.dead)
@@ -191,55 +147,29 @@ public class LevelGenerator : MonoBehaviour {
             Debug.Log("ERROR: No active player");
         }
 
-        //while(yGenerated < yPosition + lookAhead)
-        //{
-        //    yGenerated += GenerateSection();
-        //}
 
-        if (!initialized)
-            initializeGeneration();
-
+        int loopMax = 100;
         // check if enough tiles are stored
-        if (yGenerated < yPosition + maxLookAhead)
+        while (yGenerated < yPosition + lookAhead && loopMax > 0)
         {
-            // small update
-            if (yGenerated >= yPosition + lookAhead)
-            {
-                if (onePass())
-                {
-                    createLevel();
-                }
-            }// generate section, we are in a hurry
-            else
-            {
-                bool succeed = false;
-                while (!succeed)
-                {
-                    if (!initialized)
-                        initializeGeneration();
-                    succeed = onePass();
-                }
-                createLevel();
-            }
+            generateRow();
+
+            if (bgGenerated < yPosition + lookAhead)
+                generateBackground();
         }
+        if (loopMax == 0)
+            Debug.Log("Update loop failed");
 
 	}
 
     private float objectDensity = 0.8f;
 
-    private bool[] openings = new bool[] { false, false, false, true,  false, false, false };
-    private bool[] endings  = new bool[] { false, false, false, false, false, false, false };
-
     private float yGenerated = 0;
     private float bgGenerated = 0;
 
+    private bool[] lastRowPath = new bool[] { false, false, false, true, false, false, false };
+
     private PlayerMovement romeoMove;
     private PlayerMovement juliaMove;
-    
-    
-    // temp generation stuff
-    private bool initialized = false;
-    private uint maxTime = 100;
-    private List<List<bool>> section = new List<List<bool>>();
-    private List<Vector2i> candidates = new List<Vector2i>();
+
 }
